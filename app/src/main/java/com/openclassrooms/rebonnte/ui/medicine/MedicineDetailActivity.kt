@@ -35,9 +35,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import com.openclassrooms.rebonnte.MainActivity
-import com.openclassrooms.rebonnte.ui.history.History
+import com.openclassrooms.rebonnte.model.History
+import com.openclassrooms.rebonnte.model.Medicine
 import com.openclassrooms.rebonnte.ui.theme.RebonnteTheme
-import java.util.Date
 
 class MedicineDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +74,7 @@ fun MedicineDetailScreen(name: String, viewModel: MedicineViewModel) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             TextField(
-                value = medicine.nameAisle,
+                value = medicine.aisleName,
                 onValueChange = {},
                 label = { Text("Aisle") },
                 enabled = false,
@@ -130,8 +130,9 @@ fun MedicineDetailScreen(name: String, viewModel: MedicineViewModel) {
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = "History", style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.height(8.dp))
+            // TODO T07 : charger l'historique depuis la sous-collection Firestore
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(medicine.histories) { history ->
+                items(emptyList<History>()) { history ->
                     HistoryItem(history = history)
                 }
             }

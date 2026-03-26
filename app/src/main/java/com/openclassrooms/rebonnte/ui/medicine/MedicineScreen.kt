@@ -2,8 +2,8 @@ package com.openclassrooms.rebonnte.ui.medicine
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-
 import android.content.Intent
+import com.openclassrooms.rebonnte.model.Medicine
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn

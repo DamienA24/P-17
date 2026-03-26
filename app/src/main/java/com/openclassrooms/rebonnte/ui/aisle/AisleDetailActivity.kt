@@ -29,7 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import com.openclassrooms.rebonnte.MainActivity
-import com.openclassrooms.rebonnte.ui.medicine.Medicine
+import com.openclassrooms.rebonnte.model.Medicine
 import com.openclassrooms.rebonnte.ui.medicine.MedicineDetailActivity
 import com.openclassrooms.rebonnte.ui.medicine.MedicineViewModel
 import com.openclassrooms.rebonnte.ui.theme.RebonnteTheme
@@ -51,7 +51,7 @@ class AisleDetailActivity : ComponentActivity() {
 @Composable
 fun AisleDetailScreen(name: String, viewModel: MedicineViewModel) {
     val medicines by viewModel.medicines.collectAsState(initial = emptyList())
-    val filteredMedicines = medicines.filter { it.nameAisle == name }
+    val filteredMedicines = medicines.filter { it.aisleName == name }
     val context = LocalContext.current
 
     Scaffold { paddingValues ->

@@ -3,6 +3,7 @@ package com.openclassrooms.rebonnte.ui.aisle
 import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.clickable
+import com.openclassrooms.rebonnte.model.Aisle
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
