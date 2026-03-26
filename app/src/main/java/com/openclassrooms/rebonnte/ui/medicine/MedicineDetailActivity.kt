@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import com.openclassrooms.rebonnte.MainActivity
 import com.openclassrooms.rebonnte.model.History
-import com.openclassrooms.rebonnte.model.Medicine
 import com.openclassrooms.rebonnte.ui.theme.RebonnteTheme
 
 class MedicineDetailActivity : ComponentActivity() {
