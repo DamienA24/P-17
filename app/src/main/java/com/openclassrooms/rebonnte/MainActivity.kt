@@ -214,9 +214,7 @@ fun MyApp() {
             },
             floatingActionButton = {
                 FloatingActionButton(onClick = {
-                    if (route == "medicine") {
-                        medicineViewModel.addRandomMedicine(aisleViewModel.aisles.value)
-                    } else if (route == "aisle") {
+                    if (route == "aisle") {
                         aisleViewModel.addAisle("Aisle " + (aisleViewModel.aisles.value.size + 1))
                     }
                 }) {
