@@ -28,7 +28,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
-import com.openclassrooms.rebonnte.MainActivity
 import com.openclassrooms.rebonnte.model.Medicine
 import com.openclassrooms.rebonnte.ui.medicine.MedicineDetailActivity
 import com.openclassrooms.rebonnte.ui.medicine.MedicineViewModel
@@ -38,7 +37,7 @@ class AisleDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val name = intent.getStringExtra("nameAisle") ?: "Unknown"
-        val viewModel = ViewModelProvider(MainActivity.mainActivity)[MedicineViewModel::class.java]
+        val viewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
         setContent {
             RebonnteTheme {
                 AisleDetailScreen(name, viewModel)

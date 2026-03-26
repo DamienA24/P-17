@@ -34,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
-import com.openclassrooms.rebonnte.MainActivity
 import com.openclassrooms.rebonnte.model.History
 import com.openclassrooms.rebonnte.ui.theme.RebonnteTheme
 
@@ -42,7 +41,7 @@ class MedicineDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val name = intent.getStringExtra("nameMedicine") ?: "Unknown"
-        val viewModel = ViewModelProvider(MainActivity.mainActivity)[MedicineViewModel::class.java]
+        val viewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
 
         setContent {
             RebonnteTheme {
