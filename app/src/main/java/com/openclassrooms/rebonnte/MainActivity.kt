@@ -217,7 +217,7 @@ fun MyApp() {
                     if (route == "medicine") {
                         medicineViewModel.addRandomMedicine(aisleViewModel.aisles.value)
                     } else if (route == "aisle") {
-                        aisleViewModel.addRandomAisle()
+                        aisleViewModel.addAisle("Aisle " + (aisleViewModel.aisles.value.size + 1))
                     }
                 }) {
                     Icon(Icons.Default.Add, contentDescription = "Add")
