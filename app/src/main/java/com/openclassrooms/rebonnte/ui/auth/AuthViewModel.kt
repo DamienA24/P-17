@@ -11,9 +11,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class AuthUiState {
-    object Idle : AuthUiState()
-    object Loading : AuthUiState()
-    object Success : AuthUiState()
+    data object Idle : AuthUiState()
+    data object Loading : AuthUiState()
+    data object Success : AuthUiState()
     data class Error(val message: String) : AuthUiState()
 }
 

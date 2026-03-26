@@ -13,11 +13,13 @@ class AuthRepository @Inject constructor(
     fun currentUser(): FirebaseUser? = auth.currentUser
 
     suspend fun signIn(email: String, password: String): Result<FirebaseUser> = runCatching {
-        auth.signInWithEmailAndPassword(email, password).await().user!!
+        auth.signInWithEmailAndPassword(email, password).await().user
+            ?: error("Authentication succeeded but user is null")
     }
 
     suspend fun register(email: String, password: String): Result<FirebaseUser> = runCatching {
-        auth.createUserWithEmailAndPassword(email, password).await().user!!
+        auth.createUserWithEmailAndPassword(email, password).await().user
+            ?: error("Authentication succeeded but user is null")
     }
 
     fun signOut() = auth.signOut()
