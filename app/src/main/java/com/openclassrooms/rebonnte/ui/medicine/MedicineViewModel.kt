@@ -45,11 +45,11 @@ class MedicineViewModel @Inject constructor(
     }
 
     fun sortByName() {
-        _medicines.value = _medicines.value.sortedBy { it.name }
+        _medicines.value = _allMedicines.value.sortedBy { it.name }
     }
 
     fun sortByStock() {
-        _medicines.value = _medicines.value.sortedBy { it.stock }
+        _medicines.value = _allMedicines.value.sortedBy { it.stock }
     }
 
     fun updateStock(medicineId: String, aisleId: String, delta: Int, userEmail: String) {
