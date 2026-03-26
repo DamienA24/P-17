@@ -87,14 +87,7 @@ fun MedicineDetailScreen(name: String, viewModel: MedicineViewModel) {
             ) {
                 IconButton(onClick = {
                     if (stock > 0) {
-                        medicines[medicines.size].histories.toMutableList().add(
-                            History(
-                                medicine.name,
-                                "efeza56f1e65f",
-                                Date().toString(),
-                                "Updated medicine details"
-                            )
-                        )
+                        // TODO T05/T07 : updateStock via Repository
                         stock--
                     }
                 }) {
@@ -111,14 +104,7 @@ fun MedicineDetailScreen(name: String, viewModel: MedicineViewModel) {
                     modifier = Modifier.weight(1f)
                 )
                 IconButton(onClick = {
-                    medicines[medicines.size].histories.toMutableList().add(
-                        History(
-                            medicine.name,
-                            "efeza56f1e65f",
-                            Date().toString(),
-                            "Updated medicine details"
-                        )
-                    )
+                    // TODO T05/T07 : updateStock via Repository
                     stock++
                 }) {
                     Icon(
