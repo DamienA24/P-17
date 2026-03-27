@@ -42,7 +42,7 @@ class AisleDetailViewModelTest {
     }
 
     @Test
-    fun `medicines starts empty before repository emits`() = runTest {
+    fun `medicines is empty when repository emits empty list`() = runTest {
         val repo = mockk<MedicineRepository> {
             every { getMedicinesByAisle("a1") } returns flowOf(emptyList())
         }
