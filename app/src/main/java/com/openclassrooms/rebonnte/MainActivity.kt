@@ -165,8 +165,8 @@ fun AuthenticatedShell() {
             navController = navController,
             startDestination = "aisle"
         ) {
-            composable("aisle") { AisleScreen(aisleViewModel) }
-            composable("medicine") { MedicineScreen(medicineViewModel) }
+            composable("aisle") { AisleScreen(aisleViewModel, onAisleClick = { _, _ -> }) }
+            composable("medicine") { MedicineScreen(medicineViewModel, onMedicineClick = { _, _ -> }) }
         }
     }
 }
