@@ -1,6 +1,7 @@
 package com.openclassrooms.rebonnte
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -27,14 +28,18 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
+import com.openclassrooms.rebonnte.ui.aisle.AisleDetailScreen
 import com.openclassrooms.rebonnte.ui.aisle.AisleScreen
 import com.openclassrooms.rebonnte.ui.aisle.AisleViewModel
 import com.openclassrooms.rebonnte.ui.auth.LoginScreen
+import com.openclassrooms.rebonnte.ui.medicine.MedicineDetailScreen
 import com.openclassrooms.rebonnte.ui.medicine.MedicineScreen
 import com.openclassrooms.rebonnte.ui.medicine.MedicineViewModel
 import com.openclassrooms.rebonnte.ui.theme.RebonnteTheme
@@ -165,8 +170,48 @@ fun AuthenticatedShell() {
             navController = navController,
             startDestination = "aisle"
         ) {
-            composable("aisle") { AisleScreen(aisleViewModel, onAisleClick = { _, _ -> }) }
-            composable("medicine") { MedicineScreen(medicineViewModel, onMedicineClick = { _, _ -> }) }
+            composable("aisle") {
+                AisleScreen(
+                    viewModel = aisleViewModel,
+                    onAisleClick = { aisleId, aisleName ->
+                        navController.navigate("aisle_detail/$aisleId/${Uri.encode(aisleName)}")
+                    }
+                )
+            }
+            composable("medicine") {
+                MedicineScreen(
+                    viewModel = medicineViewModel,
+                    onMedicineClick = { medicineId, aisleId ->
+                        navController.navigate("medicine_detail/$medicineId/$aisleId")
+                    }
+                )
+            }
+            composable(
+                route = "aisle_detail/{aisleId}/{aisleName}",
+                arguments = listOf(
+                    navArgument("aisleId") { type = NavType.StringType },
+                    navArgument("aisleName") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val aisleId = backStackEntry.arguments?.getString("aisleId") ?: ""
+                val aisleName = backStackEntry.arguments?.getString("aisleName") ?: ""
+                AisleDetailScreen(
+                    aisleName = aisleName,
+                    onBack = { navController.navigateUp() },
+                    onMedicineClick = { medicineId, aisleId ->
+                        navController.navigate("medicine_detail/$medicineId/$aisleId")
+                    }
+                )
+            }
+            composable(
+                route = "medicine_detail/{medicineId}/{aisleId}",
+                arguments = listOf(
+                    navArgument("medicineId") { type = NavType.StringType },
+                    navArgument("aisleId") { type = NavType.StringType }
+                )
+            ) {
+                MedicineDetailScreen(onBack = { navController.navigateUp() })
+            }
         }
     }
 }
