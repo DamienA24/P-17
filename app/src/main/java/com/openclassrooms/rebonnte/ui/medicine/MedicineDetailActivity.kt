@@ -45,14 +45,14 @@ class MedicineDetailActivity : ComponentActivity() {
 
         setContent {
             RebonnteTheme {
-                MedicineDetailScreen(name, viewModel)
+                LegacyMedicineDetailScreen(name, viewModel)
             }
         }
     }
 }
 
 @Composable
-fun MedicineDetailScreen(name: String, viewModel: MedicineViewModel) {
+fun LegacyMedicineDetailScreen(name: String, viewModel: MedicineViewModel) {
     val medicines by viewModel.medicines.collectAsState(initial = emptyList())
     val medicine = medicines.find { it.name == name } ?: return
     var stock by remember { mutableStateOf(medicine.stock) }
@@ -117,7 +117,7 @@ fun MedicineDetailScreen(name: String, viewModel: MedicineViewModel) {
             // TODO T07 : charger l'historique depuis la sous-collection Firestore
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(emptyList<History>()) { history ->
-                    HistoryItem(history = history)
+                    LegacyHistoryItem(history = history)
                 }
             }
         }
@@ -125,7 +125,7 @@ fun MedicineDetailScreen(name: String, viewModel: MedicineViewModel) {
 }
 
 @Composable
-fun HistoryItem(history: History) {
+fun LegacyHistoryItem(history: History) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
