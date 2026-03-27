@@ -1,8 +1,5 @@
 package com.openclassrooms.rebonnte.ui.medicine
 
-import android.content.Context
-import androidx.compose.runtime.Composable
-import android.content.Intent
 import com.openclassrooms.rebonnte.model.Medicine
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,20 +13,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.platform.LocalContext
 
 @Composable
-fun MedicineScreen(viewModel: MedicineViewModel) {
+fun MedicineScreen(
+    viewModel: MedicineViewModel,
+    onMedicineClick: (medicineId: String, aisleId: String) -> Unit
+) {
     val medicines by viewModel.medicines.collectAsState(initial = emptyList())
-    val context = LocalContext.current
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(medicines) { medicine ->
-            MedicineItem(medicine = medicine, onClick = {
-                startDetailActivity(context, medicine.name)
-            })
+            MedicineItem(medicine = medicine, onClick = { onMedicineClick(medicine.id, medicine.aisleId) })
         }
     }
 }
@@ -49,11 +43,4 @@ fun MedicineItem(medicine: Medicine, onClick: () -> Unit) {
         }
         Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = "Arrow")
     }
-}
-
-private fun startDetailActivity(context: Context, name: String) {
-    val intent = Intent(context, MedicineDetailActivity::class.java).apply {
-        putExtra("nameMedicine", name)
-    }
-    context.startActivity(intent)
 }
