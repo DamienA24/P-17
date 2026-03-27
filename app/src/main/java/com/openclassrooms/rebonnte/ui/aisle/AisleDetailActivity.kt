@@ -40,7 +40,7 @@ class AisleDetailActivity : ComponentActivity() {
         val viewModel = ViewModelProvider(this)[MedicineViewModel::class.java]
         setContent {
             RebonnteTheme {
-                AisleDetailScreen(name, viewModel)
+                LegacyAisleDetailScreen(name, viewModel)
             }
         }
     }
@@ -48,7 +48,7 @@ class AisleDetailActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AisleDetailScreen(name: String, viewModel: MedicineViewModel) {
+fun LegacyAisleDetailScreen(name: String, viewModel: MedicineViewModel) {
     val medicines by viewModel.medicines.collectAsState(initial = emptyList())
     val filteredMedicines = medicines.filter { it.aisleName == name }
     val context = LocalContext.current
