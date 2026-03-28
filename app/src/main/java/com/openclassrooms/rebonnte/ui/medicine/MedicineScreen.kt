@@ -11,30 +11,89 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MedicineScreen(
-    viewModel: MedicineViewModel,
-    onMedicineClick: (medicineId: String, aisleId: String) -> Unit
+    onMedicineClick: (medicineId: String, aisleId: String) -> Unit,
+    viewModel: MedicineViewModel = hiltViewModel()
 ) {
-    val medicines by viewModel.medicines.collectAsState(initial = emptyList())
+    val medicines by viewModel.medicines.collectAsState()
+    var isSearchActive by rememberSaveable { mutableStateOf(false) }
+    var searchQuery by remember { mutableStateOf("") }
 
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(medicines) { medicine ->
-            MedicineItem(medicine = medicine, onClick = { onMedicineClick(medicine.id, medicine.aisleId) })
+    Scaffold(
+        topBar = {
+            var expanded by remember { mutableStateOf(false) }
+            Column(verticalArrangement = Arrangement.spacedBy((-1).dp)) {
+                TopAppBar(
+                    title = { Text("Medicines") },
+                    actions = {
+                        Box {
+                            IconButton(onClick = { expanded = true }) {
+                                Icon(Icons.Default.MoreVert, contentDescription = null)
+                            }
+                            DropdownMenu(
+                                expanded = expanded,
+                                onDismissRequest = { expanded = false },
+                                offset = DpOffset(x = 0.dp, y = 0.dp)
+                            ) {
+                                DropdownMenuItem(
+                                    onClick = { viewModel.sortByNone(); expanded = false },
+                                    text = { Text("Sort by None") }
+                                )
+                                DropdownMenuItem(
+                                    onClick = { viewModel.sortByName(); expanded = false },
+                                    text = { Text("Sort by Name") }
+                                )
+                                DropdownMenuItem(
+                                    onClick = { viewModel.sortByStock(); expanded = false },
+                                    text = { Text("Sort by Stock") }
+                                )
+                            }
+                        }
+                    }
+                )
+                EmbeddedSearchBar(
+                    query = searchQuery,
+                    onQueryChange = {
+                        viewModel.filterByName(it)
+                        searchQuery = it
+                    },
+                    isSearchActive = isSearchActive,
+                    onActiveChanged = { isSearchActive = it }
+                )
+            }
+        }
+    ) { padding ->
+        LazyColumn(
+            contentPadding = padding,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            items(medicines) { medicine ->
+                MedicineItem(medicine = medicine, onClick = { onMedicineClick(medicine.id, medicine.aisleId) })
+            }
         }
     }
 }
