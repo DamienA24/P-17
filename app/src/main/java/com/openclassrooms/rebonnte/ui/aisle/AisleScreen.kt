@@ -23,8 +23,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.openclassrooms.rebonnte.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,13 +38,13 @@ fun AisleScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Aisle") })
+            TopAppBar(title = { Text(stringResource(R.string.aisle_screen_title)) })
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                viewModel.addAisle("Aisle ${aisles.size + 1}")
+                viewModel.addAisle(stringResource(R.string.new_aisle_name, aisles.size + 1))
             }) {
-                Icon(Icons.Default.Add, contentDescription = "Add")
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_aisle_cd))
             }
         }
     ) { padding ->
@@ -67,6 +69,6 @@ fun AisleItem(aisle: Aisle, onClick: () -> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(text = aisle.name, style = MaterialTheme.typography.bodyMedium)
-        Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = "Arrow")
+        Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = stringResource(R.string.arrow_cd))
     }
 }

@@ -1,3 +1,42 @@
 <resources>
     <string name="app_name">rebonnte</string>
+
+    <!-- Navigation -->
+    <string name="nav_aisle">Aisle</string>
+    <string name="nav_medicine">Medicine</string>
+
+    <!-- Aisle screen -->
+    <string name="aisle_screen_title">Aisle</string>
+    <string name="add_aisle_cd">Add</string>
+    <string name="new_aisle_name">Aisle %d</string>
+    <string name="arrow_cd">Arrow</string>
+
+    <!-- Aisle detail / back navigation -->
+    <string name="back_cd">Retour</string>
+
+    <!-- Medicine screen -->
+    <string name="medicine_screen_title">Medicines</string>
+    <string name="sort_by_none">Sort by None</string>
+    <string name="sort_by_name">Sort by Name</string>
+    <string name="sort_by_stock">Sort by Stock</string>
+    <string name="search_placeholder">Search</string>
+
+    <!-- Medicine detail screen -->
+    <string name="medicine_name_label">Name</string>
+    <string name="medicine_aisle_label">Aisle</string>
+    <string name="medicine_stock_label">Stock</string>
+    <string name="decrement_stock_cd">Minus One</string>
+    <string name="increment_stock_cd">Plus One</string>
+    <string name="history_title">History</string>
+    <string name="history_user">User: %s</string>
+    <string name="history_date">Date: %s</string>
+    <string name="history_details">Details: %s</string>
+
+    <!-- Login screen -->
+    <string name="app_title">Rebonnte</string>
+    <string name="email_label">Email</string>
+    <string name="password_label">Mot de passe</string>
+    <string name="loading_cd">Chargement en cours</string>
+    <string name="login_button">Se connecter</string>
+    <string name="register_button">Créer un compte</string>
 </resources>

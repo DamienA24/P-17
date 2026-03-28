@@ -9,9 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.openclassrooms.rebonnte.R
 
 @Composable
 fun LoginScreen(
@@ -33,13 +35,13 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Rebonnte", style = MaterialTheme.typography.headlineMedium)
+        Text(stringResource(R.string.app_title), style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(32.dp))
 
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("Email") },
+            label = { Text(stringResource(R.string.email_label)) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
@@ -50,7 +52,7 @@ fun LoginScreen(
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Mot de passe") },
+            label = { Text(stringResource(R.string.password_label)) },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier.fillMaxWidth(),
@@ -70,6 +72,7 @@ fun LoginScreen(
 
         val isLoading = uiState is AuthUiState.Loading
         val fieldsNotEmpty = email.isNotBlank() && password.isNotBlank()
+        val loadingCd = stringResource(R.string.loading_cd)
 
         Button(
             onClick = { viewModel.signIn(email, password) },
@@ -80,12 +83,12 @@ fun LoginScreen(
                 CircularProgressIndicator(
                     modifier = Modifier
                         .size(18.dp)
-                        .semantics { contentDescription = "Chargement en cours" },
+                        .semantics { contentDescription = loadingCd },
                     strokeWidth = 2.dp,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             } else {
-                Text("Se connecter")
+                Text(stringResource(R.string.login_button))
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
@@ -95,7 +98,7 @@ fun LoginScreen(
             enabled = !isLoading && fieldsNotEmpty,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Créer un compte")
+            Text(stringResource(R.string.register_button))
         }
     }
 }

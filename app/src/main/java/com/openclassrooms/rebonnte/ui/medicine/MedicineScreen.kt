@@ -31,7 +31,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.openclassrooms.rebonnte.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,7 +50,7 @@ fun MedicineScreen(
             var expanded by remember { mutableStateOf(false) }
             Column(verticalArrangement = Arrangement.spacedBy((-1).dp)) {
                 TopAppBar(
-                    title = { Text("Medicines") },
+                    title = { Text(stringResource(R.string.medicine_screen_title)) },
                     actions = {
                         Box {
                             IconButton(onClick = { expanded = true }) {
@@ -61,15 +63,15 @@ fun MedicineScreen(
                             ) {
                                 DropdownMenuItem(
                                     onClick = { viewModel.sortByNone(); expanded = false },
-                                    text = { Text("Sort by None") }
+                                    text = { Text(stringResource(R.string.sort_by_none)) }
                                 )
                                 DropdownMenuItem(
                                     onClick = { viewModel.sortByName(); expanded = false },
-                                    text = { Text("Sort by Name") }
+                                    text = { Text(stringResource(R.string.sort_by_name)) }
                                 )
                                 DropdownMenuItem(
                                     onClick = { viewModel.sortByStock(); expanded = false },
-                                    text = { Text("Sort by Stock") }
+                                    text = { Text(stringResource(R.string.sort_by_stock)) }
                                 )
                             }
                         }
@@ -111,7 +113,7 @@ fun MedicineItem(medicine: Medicine, onClick: () -> Unit) {
             Text(text = medicine.name, style = MaterialTheme.typography.bodyLarge)
             Text(text = "Stock: ${medicine.stock}", style = MaterialTheme.typography.bodyMedium)
         }
-        Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = "Arrow")
+        Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = stringResource(R.string.arrow_cd))
     }
 }
 
@@ -168,7 +170,7 @@ fun EmbeddedSearchBar(
             decorationBox = { innerTextField ->
                 if (searchQuery.isEmpty()) {
                     Text(
-                        text = "Search",
+                        text = stringResource(R.string.search_placeholder),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                     )
