@@ -3,11 +3,8 @@ package com.openclassrooms.rebonnte
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.*
 import com.google.firebase.auth.FirebaseAuth
-import com.openclassrooms.rebonnte.navigation.AuthenticatedShell
-import com.openclassrooms.rebonnte.ui.auth.LoginScreen
-import com.openclassrooms.rebonnte.ui.theme.RebonnteTheme
+import com.openclassrooms.rebonnte.navigation.AppNavigation
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -19,19 +16,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApp(isLoggedIn = auth.currentUser != null)
-        }
-    }
-}
-
-@Composable
-fun MyApp(isLoggedIn: Boolean) {
-    RebonnteTheme {
-        var loggedIn by remember { mutableStateOf(isLoggedIn) }
-        if (loggedIn) {
-            AuthenticatedShell()
-        } else {
-            LoginScreen(onLoginSuccess = { loggedIn = true })
+            AppNavigation(isLoggedIn = auth.currentUser != null)
         }
     }
 }
