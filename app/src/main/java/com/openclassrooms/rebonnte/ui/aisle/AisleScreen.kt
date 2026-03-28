@@ -10,26 +10,49 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AisleScreen(
-    viewModel: AisleViewModel,
-    onAisleClick: (aisleId: String, aisleName: String) -> Unit
+    onAisleClick: (aisleId: String, aisleName: String) -> Unit,
+    viewModel: AisleViewModel = hiltViewModel()
 ) {
-    val aisles by viewModel.aisles.collectAsState(initial = emptyList())
+    val aisles by viewModel.aisles.collectAsState()
 
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(aisles) { aisle ->
-            AisleItem(aisle = aisle, onClick = { onAisleClick(aisle.id, aisle.name) })
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text("Aisle") })
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+                viewModel.addAisle("Aisle ${aisles.size + 1}")
+            }) {
+                Icon(Icons.Default.Add, contentDescription = "Add")
+            }
+        }
+    ) { padding ->
+        LazyColumn(
+            contentPadding = padding,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            items(aisles) { aisle ->
+                AisleItem(aisle = aisle, onClick = { onAisleClick(aisle.id, aisle.name) })
+            }
         }
     }
 }
