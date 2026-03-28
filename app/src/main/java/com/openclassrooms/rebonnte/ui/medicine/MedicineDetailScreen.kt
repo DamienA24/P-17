@@ -30,7 +30,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.openclassrooms.rebonnte.R
 import com.openclassrooms.rebonnte.model.History
 import com.openclassrooms.rebonnte.model.Medicine
 
@@ -49,7 +51,7 @@ fun MedicineDetailScreen(
                 title = { Text(medicine?.name ?: "") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Retour")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back_cd))
                     }
                 }
             )
@@ -64,7 +66,7 @@ fun MedicineDetailScreen(
                 TextField(
                     value = med.name,
                     onValueChange = {},
-                    label = { Text("Name") },
+                    label = { Text(stringResource(R.string.medicine_name_label)) },
                     enabled = false,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -72,7 +74,7 @@ fun MedicineDetailScreen(
                 TextField(
                     value = med.aisleName,
                     onValueChange = {},
-                    label = { Text("Aisle") },
+                    label = { Text(stringResource(R.string.medicine_aisle_label)) },
                     enabled = false,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -82,21 +84,21 @@ fun MedicineDetailScreen(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     IconButton(onClick = { if (med.stock > 0) viewModel.updateStock(-1) }) {
-                        Icon(Icons.Filled.KeyboardArrowDown, contentDescription = "Minus One")
+                        Icon(Icons.Filled.KeyboardArrowDown, contentDescription = stringResource(R.string.decrement_stock_cd))
                     }
                     TextField(
                         value = med.stock.toString(),
                         onValueChange = {},
-                        label = { Text("Stock") },
+                        label = { Text(stringResource(R.string.medicine_stock_label)) },
                         enabled = false,
                         modifier = Modifier.weight(1f)
                     )
                     IconButton(onClick = { viewModel.updateStock(1) }) {
-                        Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Plus One")
+                        Icon(Icons.Default.KeyboardArrowUp, contentDescription = stringResource(R.string.increment_stock_cd))
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                Text("History", style = MaterialTheme.typography.titleLarge)
+                Text(stringResource(R.string.history_title), style = MaterialTheme.typography.titleLarge)
                 Spacer(modifier = Modifier.height(8.dp))
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(history) { h -> HistoryItem(history = h) }
@@ -116,9 +118,9 @@ fun HistoryItem(history: History) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = history.medicineName, fontWeight = FontWeight.Bold)
-            Text(text = "User: ${history.userEmail}")
-            Text(text = "Date: ${history.date}")
-            Text(text = "Details: ${history.details}")
+            Text(text = stringResource(R.string.history_user, history.userEmail))
+            Text(text = stringResource(R.string.history_date, history.date))
+            Text(text = stringResource(R.string.history_details, history.details))
         }
     }
 }

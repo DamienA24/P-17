@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -14,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.openclassrooms.rebonnte.R
 import com.openclassrooms.rebonnte.ui.aisle.AisleDetailScreen
 import com.openclassrooms.rebonnte.ui.aisle.AisleScreen
 import com.openclassrooms.rebonnte.ui.medicine.MedicineDetailScreen
@@ -30,13 +32,13 @@ fun AuthenticatedShell() {
             NavigationBar {
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.Home, contentDescription = null) },
-                    label = { Text("Aisle") },
+                    label = { Text(stringResource(R.string.nav_aisle)) },
                     selected = route == "aisle",
                     onClick = { navController.navigate("aisle") }
                 )
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.List, contentDescription = null) },
-                    label = { Text("Medicine") },
+                    label = { Text(stringResource(R.string.nav_medicine)) },
                     selected = route == "medicine",
                     onClick = { navController.navigate("medicine") }
                 )
