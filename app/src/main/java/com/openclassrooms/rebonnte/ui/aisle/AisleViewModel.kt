@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,7 +21,7 @@ class AisleViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            repo.getAisles().collect { _aisles.value = it }
+            repo.getAisles().catch { }.collect { _aisles.value = it }
         }
     }
 
