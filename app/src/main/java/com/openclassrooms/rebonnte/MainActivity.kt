@@ -7,7 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.MoreVert
@@ -28,7 +27,6 @@ import androidx.navigation.navArgument
 import com.google.firebase.auth.FirebaseAuth
 import com.openclassrooms.rebonnte.ui.aisle.AisleDetailScreen
 import com.openclassrooms.rebonnte.ui.aisle.AisleScreen
-import com.openclassrooms.rebonnte.ui.aisle.AisleViewModel
 import com.openclassrooms.rebonnte.ui.auth.LoginScreen
 import com.openclassrooms.rebonnte.ui.medicine.EmbeddedSearchBar
 import com.openclassrooms.rebonnte.ui.medicine.MedicineDetailScreen
@@ -68,7 +66,6 @@ fun MyApp(isLoggedIn: Boolean) {
 fun AuthenticatedShell() {
     val navController = rememberNavController()
     val medicineViewModel: MedicineViewModel = hiltViewModel()
-    val aisleViewModel: AisleViewModel = hiltViewModel()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val route = navBackStackEntry?.destination?.route
 
@@ -79,7 +76,7 @@ fun AuthenticatedShell() {
             Column(verticalArrangement = Arrangement.spacedBy((-1).dp)) {
                 TopAppBar(
                     title = {
-                        if (route == "aisle") Text(text = "Aisle") else Text(text = "Medicines")
+                        if (route == "medicine") Text(text = "Medicines") else Text(text = "")
                     },
                     actions = {
                         var expanded by remember { mutableStateOf(false) }
@@ -147,15 +144,6 @@ fun AuthenticatedShell() {
                 )
             }
         },
-        floatingActionButton = {
-            if (route == "aisle") {
-                FloatingActionButton(onClick = {
-                    aisleViewModel.addAisle("Aisle ${aisleViewModel.aisles.value.size + 1}")
-                }) {
-                    Icon(Icons.Default.Add, contentDescription = "Add")
-                }
-            }
-        }
     ) { padding ->
         NavHost(
             modifier = Modifier.padding(padding),
@@ -164,7 +152,6 @@ fun AuthenticatedShell() {
         ) {
             composable("aisle") {
                 AisleScreen(
-                    viewModel = aisleViewModel,
                     onAisleClick = { aisleId, aisleName ->
                         navController.navigate("aisle_detail/$aisleId/${Uri.encode(aisleName)}")
                     }
