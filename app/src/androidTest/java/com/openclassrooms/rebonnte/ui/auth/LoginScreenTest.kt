@@ -5,18 +5,27 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import com.google.firebase.auth.FirebaseUser
 import com.openclassrooms.rebonnte.data.repository.AuthRepository
 import com.openclassrooms.rebonnte.ui.theme.RebonnteTheme
-import io.mockk.coEvery
-import io.mockk.mockk
 import kotlinx.coroutines.CompletableDeferred
 import org.junit.Rule
 import org.junit.Test
 
 class LoginScreenTest {
+
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private fun launchScreen() {
-        val viewModel = AuthViewModel(mockk<AuthRepository>(relaxed = true))
+    private class FakeAuthRepository(
+        private val signInAnswer: suspend () -> Result<FirebaseUser> = { throw RuntimeException("not configured") },
+        private val registerAnswer: suspend () -> Result<FirebaseUser> = { throw RuntimeException("not configured") }
+    ) : AuthRepository {
+        override fun currentUser(): FirebaseUser? = null
+        override suspend fun signIn(email: String, password: String) = signInAnswer()
+        override suspend fun register(email: String, password: String) = registerAnswer()
+        override fun signOut() {}
+    }
+
+    private fun launchScreen(repo: AuthRepository = FakeAuthRepository()) {
+        val viewModel = AuthViewModel(repo)
         composeTestRule.setContent {
             RebonnteTheme {
                 LoginScreen(onLoginSuccess = {}, viewModel = viewModel)
@@ -42,14 +51,10 @@ class LoginScreenTest {
 
     @Test
     fun errorMessageIsDisplayedWhenStateIsError() {
-        val repo = mockk<AuthRepository>()
-        coEvery { repo.signIn(any(), any()) } returns Result.failure(Exception("Email ou mot de passe incorrect"))
-        val viewModel = AuthViewModel(repo)
-        composeTestRule.setContent {
-            RebonnteTheme {
-                LoginScreen(onLoginSuccess = {}, viewModel = viewModel)
-            }
-        }
+        val repo = FakeAuthRepository(
+            signInAnswer = { Result.failure(Exception("Email ou mot de passe incorrect")) }
+        )
+        launchScreen(repo)
         composeTestRule.onNodeWithText("Email").performTextInput("test@test.com")
         composeTestRule.onNodeWithText("Mot de passe").performTextInput("wrongpassword")
         composeTestRule.onNodeWithText("Se connecter").performClick()
@@ -59,21 +64,14 @@ class LoginScreenTest {
 
     @Test
     fun loadingIndicatorIsVisibleDuringSignIn() {
-        val repo = mockk<AuthRepository>()
-        val deferred = CompletableDeferred<Result<FirebaseUser>>()
-        coEvery { repo.signIn(any(), any()) } coAnswers { deferred.await() }
-        val viewModel = AuthViewModel(repo)
-        composeTestRule.setContent {
-            RebonnteTheme {
-                LoginScreen(onLoginSuccess = {}, viewModel = viewModel)
-            }
-        }
+        val neverCompletes = CompletableDeferred<Result<FirebaseUser>>()
+        val repo = FakeAuthRepository(signInAnswer = { neverCompletes.await() })
+        launchScreen(repo)
         composeTestRule.onNodeWithText("Email").performTextInput("test@test.com")
         composeTestRule.onNodeWithText("Mot de passe").performTextInput("password123")
         composeTestRule.onNodeWithText("Se connecter").performClick()
         composeTestRule.waitForIdle()
         composeTestRule.onNodeWithContentDescription("Chargement en cours").assertIsDisplayed()
-        // Clean up
-        deferred.cancel()
+        neverCompletes.cancel()
     }
 }

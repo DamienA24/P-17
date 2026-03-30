@@ -35,6 +35,7 @@ fun AisleScreen(
     viewModel: AisleViewModel = hiltViewModel()
 ) {
     val aisles by viewModel.aisles.collectAsState()
+    val newAisleName = stringResource(R.string.new_aisle_name, aisles.size + 1)
 
     Scaffold(
         topBar = {
@@ -42,11 +43,12 @@ fun AisleScreen(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                viewModel.addAisle(stringResource(R.string.new_aisle_name, aisles.size + 1))
+                viewModel.addAisle(newAisleName)
             }) {
                 Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_aisle_cd))
             }
         }
+        
     ) { padding ->
         LazyColumn(
             contentPadding = padding,
