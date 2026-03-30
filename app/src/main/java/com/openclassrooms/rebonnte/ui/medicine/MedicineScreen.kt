@@ -167,6 +167,7 @@ fun EmbeddedSearchBar(
                 .weight(1f)
                 .padding(horizontal = 8.dp),
             singleLine = true,
+            textStyle = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.onSurface),
             decorationBox = { innerTextField ->
                 if (searchQuery.isEmpty()) {
                     Text(
