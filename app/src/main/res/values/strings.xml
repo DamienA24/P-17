@@ -2,16 +2,16 @@
     <string name="app_name">rebonnte</string>
 
     <!-- Navigation -->
-    <string name="nav_aisle">Aisle</string>
-    <string name="nav_medicine">Medicine</string>
+    <string name="nav_aisle">Rayons</string>
+    <string name="nav_medicine">Médicaments</string>
 
     <!-- Aisle screen -->
-    <string name="aisle_screen_title">Aisle</string>
-    <string name="add_aisle_cd">Add</string>
-    <string name="new_aisle_name">Aisle %d</string>
+    <string name="aisle_screen_title">Rayons</string>
+    <string name="add_aisle_cd">Ajouter un rayon</string>
+    <string name="new_aisle_name">Rayon %d</string>
     <string name="new_aisle_dialog_title">Nouveau rayon</string>
     <string name="new_aisle_name_label">Nom du rayon</string>
-    <string name="arrow_cd">Arrow</string>
+    <string name="arrow_cd">Flèche</string>
     <string name="more_options_cd">Plus d\'options</string>
     <string name="logout_label">Se déconnecter</string>
 
@@ -19,26 +19,26 @@
     <string name="back_cd">Retour</string>
 
     <!-- Medicine screen -->
-    <string name="medicine_screen_title">Medicines</string>
-    <string name="sort_by_none">Sort by None</string>
-    <string name="sort_by_name">Sort by Name</string>
-    <string name="sort_by_stock">Sort by Stock</string>
-    <string name="search_placeholder">Search</string>
+    <string name="medicine_screen_title">Médicaments</string>
+    <string name="sort_by_none">Réinitialiser le tri</string>
+    <string name="sort_by_name">Trier par nom</string>
+    <string name="sort_by_stock">Trier par stock</string>
+    <string name="search_placeholder">Rechercher</string>
     <string name="search_cd">Rechercher</string>
     <string name="close_search_cd">Fermer la recherche</string>
     <string name="clear_search_cd">Effacer la recherche</string>
     <string name="add_medicine_cd">Ajouter un médicament</string>
 
     <!-- Medicine detail screen -->
-    <string name="medicine_name_label">Name</string>
-    <string name="medicine_aisle_label">Aisle</string>
+    <string name="medicine_name_label">Nom</string>
+    <string name="medicine_aisle_label">Rayon</string>
     <string name="medicine_stock_label">Stock</string>
-    <string name="decrement_stock_cd">Minus One</string>
-    <string name="increment_stock_cd">Plus One</string>
-    <string name="history_title">History</string>
-    <string name="history_user">User: %s</string>
-    <string name="history_date">Date: %s</string>
-    <string name="history_details">Details: %s</string>
+    <string name="decrement_stock_cd">Diminuer le stock</string>
+    <string name="increment_stock_cd">Augmenter le stock</string>
+    <string name="history_title">Historique</string>
+    <string name="history_user">Utilisateur : %s</string>
+    <string name="history_date">Date : %s</string>
+    <string name="history_details">Détails : %s</string>
     <string name="new_medicine_title">Nouveau médicament</string>
     <string name="save_button">Sauvegarder</string>
     <string name="delete_medicine_cd">Supprimer ce médicament</string>
