@@ -8,6 +8,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -81,5 +82,22 @@ class MedicineViewModelTest {
         viewModel.updateStock("1", "a1", 1, "user@test.com")
         advanceUntilIdle()
         coVerify { repo.updateStock("1", "a1", 1, "user@test.com") }
+    }
+
+    @Test
+    fun `isLoading is true initially then false after first emission`() = runTest {
+        val viewModel = MedicineViewModel(repo)
+        assertEquals(true, viewModel.isLoading.value)
+        advanceUntilIdle()
+        assertEquals(false, viewModel.isLoading.value)
+    }
+
+    @Test
+    fun `errorMessage is set when flow throws`() = runTest {
+        every { repo.getMedicines() } returns flow { throw RuntimeException("Network error") }
+        val viewModel = MedicineViewModel(repo)
+        advanceUntilIdle()
+        assertEquals("Network error", viewModel.errorMessage.value)
+        assertEquals(false, viewModel.isLoading.value)
     }
 }

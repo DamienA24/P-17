@@ -2,8 +2,12 @@ package com.openclassrooms.rebonnte.ui.auth
 
 import com.google.firebase.auth.FirebaseUser
 import com.openclassrooms.rebonnte.data.repository.AuthRepository
+import io.mockk.Runs
 import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -69,5 +73,12 @@ class AuthViewModelTest {
         advanceUntilIdle()
         assertTrue(viewModel.uiState.value is AuthUiState.Error)
         assertEquals(errorMsg, (viewModel.uiState.value as AuthUiState.Error).message)
+    }
+
+    @Test
+    fun `signOut calls repository signOut`() = runTest {
+        every { repo.signOut() } just Runs
+        viewModel.signOut()
+        verify { repo.signOut() }
     }
 }

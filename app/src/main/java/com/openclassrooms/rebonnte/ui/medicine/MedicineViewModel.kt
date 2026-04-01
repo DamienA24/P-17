@@ -21,12 +21,24 @@ class MedicineViewModel @Inject constructor(
     private val _medicines = MutableStateFlow<List<Medicine>>(emptyList())
     val medicines: StateFlow<List<Medicine>> = _medicines.asStateFlow()
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
+
     init {
         viewModelScope.launch {
-            repo.getMedicines().catch { }.collect {
-                _allMedicines.value = it
-                _medicines.value = it
-            }
+            repo.getMedicines()
+                .catch { e ->
+                    _isLoading.value = false
+                    _errorMessage.value = e.message ?: "Erreur inconnue"
+                }
+                .collect {
+                    _isLoading.value = false
+                    _allMedicines.value = it
+                    _medicines.value = it
+                }
         }
     }
 
@@ -41,17 +53,11 @@ class MedicineViewModel @Inject constructor(
         }
     }
 
-    fun sortByNone() {
-        _medicines.value = _allMedicines.value
-    }
+    fun sortByNone() { _medicines.value = _allMedicines.value }
 
-    fun sortByName() {
-        _medicines.value = _allMedicines.value.sortedBy { it.name }
-    }
+    fun sortByName() { _medicines.value = _allMedicines.value.sortedBy { it.name } }
 
-    fun sortByStock() {
-        _medicines.value = _allMedicines.value.sortedBy { it.stock }
-    }
+    fun sortByStock() { _medicines.value = _allMedicines.value.sortedBy { it.stock } }
 
     fun updateStock(medicineId: String, aisleId: String, delta: Int, userEmail: String) {
         viewModelScope.launch {

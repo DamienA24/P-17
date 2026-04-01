@@ -15,14 +15,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.openclassrooms.rebonnte.R
 import com.openclassrooms.rebonnte.ui.aisle.AisleDetailScreen
 import com.openclassrooms.rebonnte.ui.aisle.AisleScreen
+import com.openclassrooms.rebonnte.ui.auth.AuthViewModel
 import com.openclassrooms.rebonnte.ui.medicine.MedicineDetailScreen
 import com.openclassrooms.rebonnte.ui.medicine.MedicineScreen
 
 @Composable
-fun AuthenticatedShell() {
+fun AuthenticatedShell(onLogout: () -> Unit) {
+    val authViewModel: AuthViewModel = hiltViewModel()
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val route = navBackStackEntry?.destination?.route
@@ -54,6 +57,10 @@ fun AuthenticatedShell() {
                 AisleScreen(
                     onAisleClick = { aisleId, aisleName ->
                         navController.navigate("aisle_detail/$aisleId/${Uri.encode(aisleName)}")
+                    },
+                    onLogout = {
+                        authViewModel.signOut()
+                        onLogout()
                     }
                 )
             }
@@ -61,7 +68,8 @@ fun AuthenticatedShell() {
                 MedicineScreen(
                     onMedicineClick = { medicineId, aisleId ->
                         navController.navigate("medicine_detail/$medicineId/$aisleId")
-                    }
+                    },
+                    onAddMedicine = { navController.navigate("medicine_new") }
                 )
             }
             composable(
@@ -88,6 +96,9 @@ fun AuthenticatedShell() {
                     navArgument("aisleId") { type = NavType.StringType }
                 )
             ) {
+                MedicineDetailScreen(onBack = { navController.navigateUp() })
+            }
+            composable("medicine_new") {
                 MedicineDetailScreen(onBack = { navController.navigateUp() })
             }
         }

@@ -19,9 +19,23 @@ class AisleViewModel @Inject constructor(
     private val _aisles = MutableStateFlow<List<Aisle>>(emptyList())
     val aisles: StateFlow<List<Aisle>> = _aisles.asStateFlow()
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
+
     init {
         viewModelScope.launch {
-            repo.getAisles().catch { }.collect { _aisles.value = it }
+            repo.getAisles()
+                .catch { e ->
+                    _isLoading.value = false
+                    _errorMessage.value = e.message ?: "Erreur inconnue"
+                }
+                .collect {
+                    _isLoading.value = false
+                    _aisles.value = it
+                }
         }
     }
 

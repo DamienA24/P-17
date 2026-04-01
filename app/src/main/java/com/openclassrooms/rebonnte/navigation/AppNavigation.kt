@@ -13,7 +13,7 @@ fun AppNavigation(isLoggedIn: Boolean) {
     RebonnteTheme {
         var loggedIn by remember { mutableStateOf(isLoggedIn) }
         if (loggedIn) {
-            AuthenticatedShell()
+            AuthenticatedShell(onLogout = { loggedIn = false })
         } else {
             LoginScreen(onLoginSuccess = { loggedIn = true })
         }
