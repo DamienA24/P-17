@@ -3,8 +3,8 @@ package com.openclassrooms.rebonnte.ui.medicine
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
 import com.openclassrooms.rebonnte.data.repository.AisleRepository
+import com.openclassrooms.rebonnte.data.repository.AuthRepository
 import com.openclassrooms.rebonnte.data.repository.MedicineRepository
 import com.openclassrooms.rebonnte.model.Aisle
 import com.openclassrooms.rebonnte.model.History
@@ -24,7 +24,7 @@ class MedicineDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val repo: MedicineRepository,
     private val aisleRepo: AisleRepository,
-    private val auth: FirebaseAuth
+    private val auth: AuthRepository
 ) : ViewModel() {
 
     private val medicineId: String? = savedStateHandle["medicineId"]
@@ -77,7 +77,7 @@ class MedicineDetailViewModel @Inject constructor(
     fun updateStock(delta: Int) {
         if (isCreationMode) return
         viewModelScope.launch {
-            repo.updateStock(medicineId!!, aisleId!!, delta, auth.currentUser?.email ?: "")
+            repo.updateStock(medicineId!!, aisleId!!, delta, auth.currentUser()?.email ?: "")
         }
     }
 

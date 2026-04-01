@@ -27,6 +27,9 @@ class MedicineViewModel @Inject constructor(
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
 
+    private var _sortNameAsc = true
+    private var _sortStockAsc = true
+
     init {
         viewModelScope.launch {
             repo.getMedicines()
@@ -53,11 +56,31 @@ class MedicineViewModel @Inject constructor(
         }
     }
 
-    fun sortByNone() { _medicines.value = _allMedicines.value }
 
-    fun sortByName() { _medicines.value = _allMedicines.value.sortedBy { it.name } }
 
-    fun sortByStock() { _medicines.value = _allMedicines.value.sortedBy { it.stock } }
+    fun sortByNone() {
+        _sortNameAsc = true
+        _sortStockAsc = true
+        _medicines.value = _allMedicines.value
+    }
+
+    fun sortByName() {
+        _medicines.value = if (_sortNameAsc) {
+            _allMedicines.value.sortedBy { it.name }
+        } else {
+            _allMedicines.value.sortedByDescending { it.name }
+        }
+        _sortNameAsc = !_sortNameAsc
+    }
+
+    fun sortByStock() {
+        _medicines.value = if (_sortStockAsc) {
+            _allMedicines.value.sortedBy { it.stock }
+        } else {
+            _allMedicines.value.sortedByDescending { it.stock }
+        }
+        _sortStockAsc = !_sortStockAsc
+    }
 
     fun updateStock(medicineId: String, aisleId: String, delta: Int, userEmail: String) {
         viewModelScope.launch {

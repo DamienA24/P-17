@@ -100,4 +100,38 @@ class MedicineViewModelTest {
         assertEquals("Network error", viewModel.errorMessage.value)
         assertEquals(false, viewModel.isLoading.value)
     }
+
+    @Test
+    fun `sortByName toggles to descending on second call`() = runTest {
+        val viewModel = MedicineViewModel(repo)
+        advanceUntilIdle()
+        viewModel.sortByName() // ascending
+        viewModel.sortByName() // descending
+        assertEquals("Ibuprofène", viewModel.medicines.value[0].name)
+        assertEquals("Doliprane",  viewModel.medicines.value[1].name)
+        assertEquals("Aspirine",   viewModel.medicines.value[2].name)
+    }
+
+    @Test
+    fun `sortByStock toggles to descending on second call`() = runTest {
+        val viewModel = MedicineViewModel(repo)
+        advanceUntilIdle()
+        viewModel.sortByStock() // ascending
+        viewModel.sortByStock() // descending
+        assertEquals(20, viewModel.medicines.value[0].stock)
+        assertEquals(10, viewModel.medicines.value[1].stock)
+        assertEquals(5,  viewModel.medicines.value[2].stock)
+    }
+
+    @Test
+    fun `sortByNone resets sort direction`() = runTest {
+        val viewModel = MedicineViewModel(repo)
+        advanceUntilIdle()
+        viewModel.sortByName() // ascending → flag flipped to false
+        viewModel.sortByNone() // resets flag back to true
+        viewModel.sortByName() // should be ascending again
+        assertEquals("Aspirine",   viewModel.medicines.value[0].name)
+        assertEquals("Doliprane",  viewModel.medicines.value[1].name)
+        assertEquals("Ibuprofène", viewModel.medicines.value[2].name)
+    }
 }
