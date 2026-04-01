@@ -47,4 +47,8 @@ class AuthViewModel @Inject constructor(
             }
         }
     }
+
+    fun signOut() {
+        repo.signOut()
+    }
 }

@@ -10,19 +10,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -39,9 +32,12 @@ import com.openclassrooms.rebonnte.R
 @Composable
 fun MedicineScreen(
     onMedicineClick: (medicineId: String, aisleId: String) -> Unit,
+    onAddMedicine: () -> Unit,
     viewModel: MedicineViewModel = hiltViewModel()
 ) {
     val medicines by viewModel.medicines.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
     var isSearchActive by rememberSaveable { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
 
@@ -54,7 +50,7 @@ fun MedicineScreen(
                     actions = {
                         Box {
                             IconButton(onClick = { expanded = true }) {
-                                Icon(Icons.Default.MoreVert, contentDescription = null)
+                                Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.more_options_cd))
                             }
                             DropdownMenu(
                                 expanded = expanded,
@@ -87,14 +83,29 @@ fun MedicineScreen(
                     onActiveChanged = { isSearchActive = it }
                 )
             }
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = onAddMedicine) {
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_medicine_cd))
+            }
         }
     ) { padding ->
-        LazyColumn(
-            contentPadding = padding,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            items(medicines) { medicine ->
-                MedicineItem(medicine = medicine, onClick = { onMedicineClick(medicine.id, medicine.aisleId) })
+        when {
+            isLoading -> Box(
+                modifier = Modifier.fillMaxSize().padding(padding),
+                contentAlignment = Alignment.Center
+            ) { CircularProgressIndicator() }
+            errorMessage != null -> Box(
+                modifier = Modifier.fillMaxSize().padding(padding),
+                contentAlignment = Alignment.Center
+            ) { Text(errorMessage!!, color = MaterialTheme.colorScheme.error) }
+            else -> LazyColumn(
+                contentPadding = padding,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(medicines, key = { it.id }) { medicine ->
+                    MedicineItem(medicine = medicine, onClick = { onMedicineClick(medicine.id, medicine.aisleId) })
+                }
             }
         }
     }
@@ -146,14 +157,14 @@ fun EmbeddedSearchBar(
             IconButton(onClick = { activeChanged(false) }) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.close_search_cd),
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
         } else {
             Icon(
                 imageVector = Icons.Rounded.Search,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.search_cd),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
@@ -186,7 +197,7 @@ fun EmbeddedSearchBar(
             }) {
                 Icon(
                     imageVector = Icons.Rounded.Close,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.clear_search_cd),
                     tint = MaterialTheme.colorScheme.primary
                 )
             }

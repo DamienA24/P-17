@@ -8,6 +8,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -55,5 +56,24 @@ class AisleViewModelTest {
         viewModel.addAisle("Rayon Test")
         advanceUntilIdle()
         coVerify { repo.addAisle(Aisle(name = "Rayon Test")) }
+    }
+
+    @Test
+    fun `isLoading is true initially then false after first emission`() = runTest {
+        val aisles = listOf(Aisle(id = "1", name = "Rayon A"))
+        every { repo.getAisles() } returns flowOf(aisles)
+        val viewModel = AisleViewModel(repo)
+        assertEquals(true, viewModel.isLoading.value)
+        advanceUntilIdle()
+        assertEquals(false, viewModel.isLoading.value)
+    }
+
+    @Test
+    fun `errorMessage is set when flow throws`() = runTest {
+        every { repo.getAisles() } returns flow { throw RuntimeException("Network error") }
+        val viewModel = AisleViewModel(repo)
+        advanceUntilIdle()
+        assertEquals("Network error", viewModel.errorMessage.value)
+        assertEquals(false, viewModel.isLoading.value)
     }
 }

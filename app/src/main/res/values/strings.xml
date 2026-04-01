@@ -9,7 +9,11 @@
     <string name="aisle_screen_title">Aisle</string>
     <string name="add_aisle_cd">Add</string>
     <string name="new_aisle_name">Aisle %d</string>
+    <string name="new_aisle_dialog_title">Nouveau rayon</string>
+    <string name="new_aisle_name_label">Nom du rayon</string>
     <string name="arrow_cd">Arrow</string>
+    <string name="more_options_cd">Plus d\'options</string>
+    <string name="logout_label">Se déconnecter</string>
 
     <!-- Aisle detail / back navigation -->
     <string name="back_cd">Retour</string>
@@ -20,6 +24,10 @@
     <string name="sort_by_name">Sort by Name</string>
     <string name="sort_by_stock">Sort by Stock</string>
     <string name="search_placeholder">Search</string>
+    <string name="search_cd">Rechercher</string>
+    <string name="close_search_cd">Fermer la recherche</string>
+    <string name="clear_search_cd">Effacer la recherche</string>
+    <string name="add_medicine_cd">Ajouter un médicament</string>
 
     <!-- Medicine detail screen -->
     <string name="medicine_name_label">Name</string>
@@ -31,6 +39,13 @@
     <string name="history_user">User: %s</string>
     <string name="history_date">Date: %s</string>
     <string name="history_details">Details: %s</string>
+    <string name="new_medicine_title">Nouveau médicament</string>
+    <string name="save_button">Sauvegarder</string>
+    <string name="delete_medicine_cd">Supprimer ce médicament</string>
+    <string name="delete_dialog_title">Supprimer ce médicament ?</string>
+    <string name="delete_dialog_text">Cette action est irréversible.</string>
+    <string name="delete_confirm_button">Supprimer</string>
+    <string name="cancel_button">Annuler</string>
 
     <!-- Login screen -->
     <string name="app_title">Rebonnte</string>
