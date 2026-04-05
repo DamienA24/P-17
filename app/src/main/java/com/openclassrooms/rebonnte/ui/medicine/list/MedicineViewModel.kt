@@ -1,4 +1,4 @@
-package com.openclassrooms.rebonnte.ui.medicine
+package com.openclassrooms.rebonnte.ui.medicine.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,8 +27,8 @@ class MedicineViewModel @Inject constructor(
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
 
-    private var _sortNameAsc = true
-    private var _sortStockAsc = true
+    private val _sortNameAsc = MutableStateFlow(true)
+    private val _sortStockAsc = MutableStateFlow(true)
 
     init {
         viewModelScope.launch {
@@ -59,27 +59,27 @@ class MedicineViewModel @Inject constructor(
 
 
     fun sortByNone() {
-        _sortNameAsc = true
-        _sortStockAsc = true
+        _sortNameAsc.value = true
+        _sortStockAsc.value = true
         _medicines.value = _allMedicines.value
     }
 
     fun sortByName() {
-        _medicines.value = if (_sortNameAsc) {
+        _medicines.value = if (_sortNameAsc.value) {
             _allMedicines.value.sortedBy { it.name }
         } else {
             _allMedicines.value.sortedByDescending { it.name }
         }
-        _sortNameAsc = !_sortNameAsc
+        _sortNameAsc.value = !_sortNameAsc.value
     }
 
     fun sortByStock() {
-        _medicines.value = if (_sortStockAsc) {
+        _medicines.value = if (_sortStockAsc.value) {
             _allMedicines.value.sortedBy { it.stock }
         } else {
             _allMedicines.value.sortedByDescending { it.stock }
         }
-        _sortStockAsc = !_sortStockAsc
+        _sortStockAsc.value = !_sortStockAsc.value
     }
 
     fun updateStock(medicineId: String, aisleId: String, delta: Int, userEmail: String) {

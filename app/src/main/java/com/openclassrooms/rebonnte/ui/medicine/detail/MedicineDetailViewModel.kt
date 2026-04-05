@@ -1,4 +1,4 @@
-package com.openclassrooms.rebonnte.ui.medicine
+package com.openclassrooms.rebonnte.ui.medicine.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -16,8 +16,16 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+data class MedicineFormState(
+    val name: String = "",
+    val stock: Int = 0,
+    val aisleId: String = "",
+    val aisleName: String = ""
+)
 
 @HiltViewModel
 class MedicineDetailViewModel @Inject constructor(
@@ -41,16 +49,8 @@ class MedicineDetailViewModel @Inject constructor(
     private val _aisles = MutableStateFlow<List<Aisle>>(emptyList())
     val aisles: StateFlow<List<Aisle>> = _aisles.asStateFlow()
 
-    private val _formName = MutableStateFlow("")
-    val formName: StateFlow<String> = _formName.asStateFlow()
-
-    private val _formStock = MutableStateFlow(0)
-    val formStock: StateFlow<Int> = _formStock.asStateFlow()
-
-    private val _formAisleId = MutableStateFlow("")
-    val formAisleId: StateFlow<String> = _formAisleId.asStateFlow()
-
-    private val _formAisleName = MutableStateFlow("")
+    private val _form = MutableStateFlow(MedicineFormState())
+    val form: StateFlow<MedicineFormState> = _form.asStateFlow()
 
     // replay=1: collector may subscribe after emit when using UnconfinedTestDispatcher
     private val _navigateBack = MutableSharedFlow<Unit>(replay = 1)
@@ -81,25 +81,16 @@ class MedicineDetailViewModel @Inject constructor(
         }
     }
 
-    fun updateFormName(name: String) { _formName.value = name }
+    fun updateFormName(name: String) { _form.update { it.copy(name = name) } }
 
-    fun updateFormStock(stock: String) { _formStock.value = stock.toIntOrNull() ?: 0 }
+    fun updateFormStock(stock: String) { _form.update { it.copy(stock = stock.toIntOrNull() ?: 0) } }
 
-    fun updateFormAisle(aisleId: String, aisleName: String) {
-        _formAisleId.value = aisleId
-        _formAisleName.value = aisleName
-    }
+    fun updateFormAisle(id: String, name: String) { _form.update { it.copy(aisleId = id, aisleName = name) } }
 
     fun saveMedicine() {
         viewModelScope.launch {
-            repo.addMedicine(
-                Medicine(
-                    name = _formName.value,
-                    stock = _formStock.value,
-                    aisleId = _formAisleId.value,
-                    aisleName = _formAisleName.value
-                )
-            )
+            val f = _form.value
+            repo.addMedicine(Medicine(name = f.name, stock = f.stock, aisleId = f.aisleId, aisleName = f.aisleName))
             _navigateBack.emit(Unit)
         }
     }

@@ -1,4 +1,4 @@
-package com.openclassrooms.rebonnte.ui.aisle
+package com.openclassrooms.rebonnte.ui.aisle.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -41,7 +41,7 @@ class AisleViewModel @Inject constructor(
 
     fun addAisle(name: String) {
         viewModelScope.launch {
-            repo.addAisle(Aisle(name = name))
+            repo.addAisle(Aisle(name = name.trim()))
         }
     }
 }
