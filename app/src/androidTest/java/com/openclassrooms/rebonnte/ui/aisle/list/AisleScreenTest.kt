@@ -1,4 +1,4 @@
-package com.openclassrooms.rebonnte.ui.aisle
+package com.openclassrooms.rebonnte.ui.aisle.list
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule

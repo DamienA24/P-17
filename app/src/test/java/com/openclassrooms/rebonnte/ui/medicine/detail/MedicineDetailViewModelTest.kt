@@ -1,9 +1,9 @@
-package com.openclassrooms.rebonnte.ui.medicine
+package com.openclassrooms.rebonnte.ui.medicine.detail
 
 import androidx.lifecycle.SavedStateHandle
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.openclassrooms.rebonnte.data.repository.AisleRepository
+import com.openclassrooms.rebonnte.data.repository.AuthRepository
 import com.openclassrooms.rebonnte.data.repository.MedicineRepository
 import com.openclassrooms.rebonnte.model.Aisle
 import com.openclassrooms.rebonnte.model.History
@@ -51,8 +51,8 @@ class MedicineDetailViewModelTest {
         every { getAisles() } returns flowOf(aisles)
     }
 
-    private fun buildAuth(email: String? = null): FirebaseAuth = mockk {
-        every { currentUser } returns if (email != null) mockk<FirebaseUser> { every { this@mockk.email } returns email } else null
+    private fun buildAuth(email: String? = null): AuthRepository = mockk {
+        every { currentUser() } returns if (email != null) mockk<FirebaseUser> { every { this@mockk.email } returns email } else null
     }
 
     @Test
