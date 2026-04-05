@@ -1,4 +1,4 @@
-package com.openclassrooms.rebonnte.ui.aisle
+package com.openclassrooms.rebonnte.ui.aisle.list
 
 import com.openclassrooms.rebonnte.model.Aisle
 import androidx.compose.foundation.clickable
@@ -30,36 +30,14 @@ fun AisleScreen(
     val errorMessage by viewModel.errorMessage.collectAsState()
     var menuExpanded by remember { mutableStateOf(false) }
     var showAddDialog by remember { mutableStateOf(false) }
-    var newAisleName by remember { mutableStateOf("") }
 
     if (showAddDialog) {
-        AlertDialog(
-            onDismissRequest = { showAddDialog = false },
-            title = { Text(stringResource(R.string.new_aisle_dialog_title)) },
-            text = {
-                TextField(
-                    value = newAisleName,
-                    onValueChange = { newAisleName = it },
-                    label = { Text(stringResource(R.string.new_aisle_name_label)) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
-                )
+        AddAisleDialog(
+            onConfirm = { name ->
+                viewModel.addAisle(name)
+                showAddDialog = false
             },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        if (newAisleName.isNotBlank()) {
-                            viewModel.addAisle(newAisleName.trim())
-                            showAddDialog = false
-                        }
-                    }
-                ) { Text(stringResource(R.string.save_button)) }
-            },
-            dismissButton = {
-                TextButton(onClick = { showAddDialog = false }) {
-                    Text(stringResource(R.string.cancel_button))
-                }
-            }
+            onDismiss = { showAddDialog = false }
         )
     }
 
@@ -89,7 +67,7 @@ fun AisleScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { newAisleName = ""; showAddDialog = true }) {
+            FloatingActionButton(onClick = { showAddDialog = true }) {
                 Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_aisle_cd))
             }
         }

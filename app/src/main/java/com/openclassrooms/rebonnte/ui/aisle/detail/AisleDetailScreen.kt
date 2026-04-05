@@ -1,4 +1,4 @@
-package com.openclassrooms.rebonnte.ui.aisle
+package com.openclassrooms.rebonnte.ui.aisle.detail
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.openclassrooms.rebonnte.R
-import com.openclassrooms.rebonnte.ui.medicine.MedicineItem
+import com.openclassrooms.rebonnte.ui.components.MedicineItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -17,11 +17,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.openclassrooms.rebonnte.R
-import com.openclassrooms.rebonnte.ui.aisle.AisleDetailScreen
-import com.openclassrooms.rebonnte.ui.aisle.AisleScreen
+import com.openclassrooms.rebonnte.ui.aisle.detail.AisleDetailScreen
+import com.openclassrooms.rebonnte.ui.aisle.list.AisleScreen
 import com.openclassrooms.rebonnte.ui.auth.AuthViewModel
-import com.openclassrooms.rebonnte.ui.medicine.MedicineDetailScreen
-import com.openclassrooms.rebonnte.ui.medicine.MedicineScreen
+import com.openclassrooms.rebonnte.ui.medicine.detail.MedicineDetailScreen
+import com.openclassrooms.rebonnte.ui.medicine.list.MedicineScreen
 
 @Composable
 fun AuthenticatedShell(onLogout: () -> Unit) {
