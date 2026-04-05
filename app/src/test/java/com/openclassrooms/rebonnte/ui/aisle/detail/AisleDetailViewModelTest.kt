@@ -1,4 +1,4 @@
-package com.openclassrooms.rebonnte.ui.aisle
+package com.openclassrooms.rebonnte.ui.aisle.detail
 
 import androidx.lifecycle.SavedStateHandle
 import com.openclassrooms.rebonnte.data.repository.MedicineRepository

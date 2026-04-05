@@ -1,4 +1,4 @@
-package com.openclassrooms.rebonnte.ui.medicine
+package com.openclassrooms.rebonnte.ui.medicine.detail
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
