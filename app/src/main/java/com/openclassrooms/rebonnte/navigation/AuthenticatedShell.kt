@@ -59,8 +59,8 @@ fun AuthenticatedShell(onLogout: () -> Unit) {
                         navController.navigate("aisle_detail/$aisleId/${Uri.encode(aisleName)}")
                     },
                     onLogout = {
-                        authViewModel.signOut()
                         onLogout()
+                        authViewModel.signOut()
                     }
                 )
             }
@@ -79,7 +79,6 @@ fun AuthenticatedShell(onLogout: () -> Unit) {
                     navArgument("aisleName") { type = NavType.StringType }
                 )
             ) { backStackEntry ->
-                val aisleId = backStackEntry.arguments?.getString("aisleId") ?: ""
                 val aisleName = backStackEntry.arguments?.getString("aisleName") ?: ""
                 AisleDetailScreen(
                     aisleName = aisleName,
