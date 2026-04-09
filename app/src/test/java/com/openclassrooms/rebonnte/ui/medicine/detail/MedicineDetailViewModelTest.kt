@@ -14,8 +14,10 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.Runs
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -32,6 +34,7 @@ import org.junit.Test
 class MedicineDetailViewModelTest {
 
     private val testDispatcher = UnconfinedTestDispatcher()
+    private val loggedInUser: FirebaseUser = mockk()
 
     @Before
     fun setup() { Dispatchers.setMain(testDispatcher) }
@@ -51,8 +54,13 @@ class MedicineDetailViewModelTest {
         every { getAisles() } returns flowOf(aisles)
     }
 
+    // authStateFlow always returns a logged-in user for normal tests.
+    // email controls currentUser() for stock update scenarios.
     private fun buildAuth(email: String? = null): AuthRepository = mockk {
-        every { currentUser() } returns if (email != null) mockk<FirebaseUser> { every { this@mockk.email } returns email } else null
+        every { currentUser() } returns if (email != null) {
+            mockk<FirebaseUser> { every { this@mockk.email } returns email }
+        } else null
+        every { authStateFlow() } returns flowOf(loggedInUser)
     }
 
     @Test
@@ -171,5 +179,29 @@ class MedicineDetailViewModelTest {
         coVerify { repo.deleteMedicine("m1", "a1") }
         assertEquals(1, events.size)
         job.cancel()
+    }
+
+    @Test
+    fun `Firestore flows stop when auth state becomes null in edit mode`() = runTest {
+        val medicine = Medicine(id = "m1", name = "Aspirin", stock = 10, aisleId = "a1", aisleName = "Aisle 1")
+        val authStateFlow = MutableStateFlow<FirebaseUser?>(loggedInUser)
+        val auth: AuthRepository = mockk {
+            every { currentUser() } returns null
+            every { authStateFlow() } returns authStateFlow
+        }
+        val repo = buildRepo(medicines = listOf(medicine))
+
+        val vm = MedicineDetailViewModel(
+            SavedStateHandle(mapOf("medicineId" to "m1", "aisleId" to "a1")),
+            repo,
+            buildAisleRepo(),
+            auth
+        )
+        assertEquals(medicine, vm.medicine.value)
+
+        authStateFlow.value = null
+
+        verify(exactly = 1) { repo.getMedicinesByAisle("a1") }
+        verify(exactly = 1) { repo.getHistory("m1", "a1") }
     }
 }

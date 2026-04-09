@@ -2,20 +2,26 @@ package com.openclassrooms.rebonnte.ui.medicine.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.openclassrooms.rebonnte.data.repository.AuthRepository
 import com.openclassrooms.rebonnte.data.repository.MedicineRepository
 import com.openclassrooms.rebonnte.model.Medicine
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import java.util.Locale
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class MedicineViewModel @Inject constructor(
-    private val repo: MedicineRepository
+    private val repo: MedicineRepository,
+    private val authRepo: AuthRepository
 ) : ViewModel() {
     private val _allMedicines = MutableStateFlow<List<Medicine>>(emptyList())
     private val _medicines = MutableStateFlow<List<Medicine>>(emptyList())
@@ -32,7 +38,10 @@ class MedicineViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            repo.getMedicines()
+            authRepo.authStateFlow()
+                .flatMapLatest { user ->
+                    if (user != null) repo.getMedicines() else emptyFlow()
+                }
                 .catch { e ->
                     _isLoading.value = false
                     _errorMessage.value = e.message ?: "Erreur inconnue"
@@ -55,8 +64,6 @@ class MedicineViewModel @Inject constructor(
             }
         }
     }
-
-
 
     fun sortByNone() {
         _sortNameAsc.value = true

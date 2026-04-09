@@ -16,6 +16,9 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,6 +30,7 @@ data class MedicineFormState(
     val aisleName: String = ""
 )
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class MedicineDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -59,17 +63,25 @@ class MedicineDetailViewModel @Inject constructor(
     init {
         if (isCreationMode) {
             viewModelScope.launch {
-                aisleRepo.getAisles().collect { _aisles.value = it }
+                auth.authStateFlow()
+                    .flatMapLatest { user -> if (user != null) aisleRepo.getAisles() else emptyFlow() }
+                    .collect { _aisles.value = it }
             }
         } else {
             require(aisleId != null) { "aisleId is required when medicineId is provided" }
             viewModelScope.launch {
-                repo.getMedicinesByAisle(aisleId).collect { medicines ->
-                    _medicine.value = medicines.find { it.id == medicineId }
-                }
+                auth.authStateFlow()
+                    .flatMapLatest { user ->
+                        if (user != null) repo.getMedicinesByAisle(aisleId) else emptyFlow()
+                    }
+                    .collect { medicines -> _medicine.value = medicines.find { it.id == medicineId } }
             }
             viewModelScope.launch {
-                repo.getHistory(medicineId!!, aisleId).collect { _history.value = it }
+                auth.authStateFlow()
+                    .flatMapLatest { user ->
+                        if (user != null) repo.getHistory(medicineId!!, aisleId) else emptyFlow()
+                    }
+                    .collect { _history.value = it }
             }
         }
     }
