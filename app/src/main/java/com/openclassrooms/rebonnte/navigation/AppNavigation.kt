@@ -1,21 +1,22 @@
 package com.openclassrooms.rebonnte.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.openclassrooms.rebonnte.ui.AppViewModel
 import com.openclassrooms.rebonnte.ui.auth.LoginScreen
 import com.openclassrooms.rebonnte.ui.theme.RebonnteTheme
 
 @Composable
-fun AppNavigation(isLoggedIn: Boolean) {
+fun AppNavigation() {
+    val appViewModel: AppViewModel = hiltViewModel()
+    val isLoggedIn by appViewModel.isLoggedIn.collectAsState()
     RebonnteTheme {
-        var loggedIn by remember { mutableStateOf(isLoggedIn) }
-        if (loggedIn) {
-            AuthenticatedShell(onLogout = { loggedIn = false })
+        if (isLoggedIn) {
+            AuthenticatedShell(onLogout = {})
         } else {
-            LoginScreen(onLoginSuccess = { loggedIn = true })
+            LoginScreen(onLoginSuccess = {})
         }
     }
 }
