@@ -28,77 +28,82 @@ fun LoginScreen(
         if (uiState is AuthUiState.Success) onLoginSuccess()
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
     ) {
-        Text(stringResource(R.string.app_title), style = MaterialTheme.typography.headlineMedium)
-        Spacer(modifier = Modifier.height(32.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(stringResource(R.string.app_title), style = MaterialTheme.typography.headlineMedium)
+            Spacer(modifier = Modifier.height(32.dp))
 
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text(stringResource(R.string.email_label)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            isError = uiState is AuthUiState.Error
-        )
-        Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text(stringResource(R.string.email_label)) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                isError = uiState is AuthUiState.Error
+            )
+            Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text(stringResource(R.string.password_label)) },
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            isError = uiState is AuthUiState.Error
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        if (uiState is AuthUiState.Error) {
-            Text(
-                text = (uiState as AuthUiState.Error).message,
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodySmall
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text(stringResource(R.string.password_label)) },
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                isError = uiState is AuthUiState.Error
             )
             Spacer(modifier = Modifier.height(8.dp))
-        }
 
-        val isLoading = uiState is AuthUiState.Loading
-        val fieldsNotEmpty = email.isNotBlank() && password.isNotBlank()
-        val loadingCd = stringResource(R.string.loading_cd)
-
-        Button(
-            onClick = { viewModel.signIn(email, password) },
-            enabled = !isLoading && fieldsNotEmpty,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            if (isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .size(18.dp)
-                        .semantics { contentDescription = loadingCd },
-                    strokeWidth = 2.dp,
-                    color = MaterialTheme.colorScheme.onPrimary
+            if (uiState is AuthUiState.Error) {
+                Text(
+                    text = (uiState as AuthUiState.Error).message,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
                 )
-            } else {
-                Text(stringResource(R.string.login_button))
+                Spacer(modifier = Modifier.height(8.dp))
             }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
 
-        OutlinedButton(
-            onClick = { viewModel.register(email, password) },
-            enabled = !isLoading && fieldsNotEmpty,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(R.string.register_button))
+            val isLoading = uiState is AuthUiState.Loading
+            val fieldsNotEmpty = email.isNotBlank() && password.isNotBlank()
+            val loadingCd = stringResource(R.string.loading_cd)
+
+            Button(
+                onClick = { viewModel.signIn(email, password) },
+                enabled = !isLoading && fieldsNotEmpty,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(18.dp)
+                            .semantics { contentDescription = loadingCd },
+                        strokeWidth = 2.dp,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                } else {
+                    Text(stringResource(R.string.login_button))
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedButton(
+                onClick = { viewModel.register(email, password) },
+                enabled = !isLoading && fieldsNotEmpty,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(stringResource(R.string.register_button))
+            }
         }
     }
 }
