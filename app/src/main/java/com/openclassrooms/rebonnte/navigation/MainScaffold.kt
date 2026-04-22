@@ -24,7 +24,7 @@ import com.openclassrooms.rebonnte.ui.medicine.detail.MedicineDetailScreen
 import com.openclassrooms.rebonnte.ui.medicine.list.MedicineScreen
 
 @Composable
-fun AuthenticatedShell(onLogout: () -> Unit) {
+fun MainScaffold(onLogout: () -> Unit) {
     val authViewModel: AuthViewModel = hiltViewModel()
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()

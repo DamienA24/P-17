@@ -14,7 +14,7 @@ fun AppNavigation() {
     val isLoggedIn by appViewModel.isLoggedIn.collectAsState()
     RebonnteTheme {
         if (isLoggedIn) {
-            AuthenticatedShell(onLogout = {})
+            MainScaffold(onLogout = {})
         } else {
             LoginScreen(onLoginSuccess = {})
         }
