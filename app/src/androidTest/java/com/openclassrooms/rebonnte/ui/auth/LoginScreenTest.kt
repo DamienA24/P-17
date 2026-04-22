@@ -6,6 +6,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.openclassrooms.rebonnte.data.repository.AuthRepository
 import com.openclassrooms.rebonnte.ui.theme.RebonnteTheme
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test
 
@@ -19,6 +21,7 @@ class LoginScreenTest {
         private val registerAnswer: suspend () -> Result<FirebaseUser> = { throw RuntimeException("not configured") }
     ) : AuthRepository {
         override fun currentUser(): FirebaseUser? = null
+        override fun authStateFlow(): Flow<FirebaseUser?> = flowOf(null)
         override suspend fun signIn(email: String, password: String) = signInAnswer()
         override suspend fun register(email: String, password: String) = registerAnswer()
         override fun signOut() {}

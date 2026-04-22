@@ -2,7 +2,9 @@ package com.openclassrooms.rebonnte.ui.aisle.list
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import com.google.firebase.auth.FirebaseUser
 import com.openclassrooms.rebonnte.data.repository.AisleRepository
+import com.openclassrooms.rebonnte.data.repository.AuthRepository
 import com.openclassrooms.rebonnte.model.Aisle
 import com.openclassrooms.rebonnte.ui.theme.RebonnteTheme
 import kotlinx.coroutines.flow.Flow
@@ -22,8 +24,18 @@ class AisleScreenTest {
         override suspend fun deleteAisle(aisleId: String) {}
     }
 
+    private class FakeAuthRepository : AuthRepository {
+        override fun currentUser(): FirebaseUser? = null
+        override fun authStateFlow(): Flow<FirebaseUser?> = flowOf(null)
+        override suspend fun signIn(email: String, password: String): Result<FirebaseUser> =
+            Result.failure(NotImplementedError())
+        override suspend fun register(email: String, password: String): Result<FirebaseUser> =
+            Result.failure(NotImplementedError())
+        override fun signOut() {}
+    }
+
     private fun launchScreen(repo: FakeAisleRepository = FakeAisleRepository()): FakeAisleRepository {
-        val viewModel = AisleViewModel(repo)
+        val viewModel = AisleViewModel(repo, FakeAuthRepository())
         composeTestRule.setContent {
             RebonnteTheme {
                 AisleScreen(onAisleClick = { _, _ -> }, onLogout = {}, viewModel = viewModel)

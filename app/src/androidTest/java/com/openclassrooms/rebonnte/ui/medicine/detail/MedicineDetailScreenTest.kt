@@ -40,6 +40,7 @@ class MedicineDetailScreenTest {
 
     private class FakeAuthRepository : AuthRepository {
         override fun currentUser(): FirebaseUser? = null
+        override fun authStateFlow(): Flow<FirebaseUser?> = flowOf(null)
         override suspend fun signIn(email: String, password: String) = throw NotImplementedError()
         override suspend fun register(email: String, password: String) = throw NotImplementedError()
         override fun signOut() {}
