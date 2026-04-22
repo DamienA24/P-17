@@ -10,7 +10,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpOffset
@@ -31,7 +30,6 @@ fun MedicineScreen(
     val medicines by viewModel.medicines.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
-    var isSearchActive by rememberSaveable { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
 
     Scaffold(
@@ -69,11 +67,9 @@ fun MedicineScreen(
                 EmbeddedSearchBar(
                     query = searchQuery,
                     onQueryChange = {
-                        viewModel.filterByName(it)
                         searchQuery = it
-                    },
-                    isSearchActive = isSearchActive,
-                    onActiveChanged = { isSearchActive = it }
+                        viewModel.filterByName(it)
+                    }
                 )
             }
         },
