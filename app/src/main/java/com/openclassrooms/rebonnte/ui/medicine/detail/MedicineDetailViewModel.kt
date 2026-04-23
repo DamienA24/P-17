@@ -100,8 +100,9 @@ class MedicineDetailViewModel @Inject constructor(
     fun updateFormAisle(id: String, name: String) { _form.update { it.copy(aisleId = id, aisleName = name) } }
 
     fun saveMedicine() {
+        val f = _form.value
+        if (f.aisleId.isBlank()) return
         viewModelScope.launch {
-            val f = _form.value
             repo.addMedicine(Medicine(name = f.name, stock = f.stock, aisleId = f.aisleId, aisleName = f.aisleName))
             _navigateBack.emit(Unit)
         }

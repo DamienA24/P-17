@@ -74,6 +74,7 @@ fun MedicineCreationForm(
         Spacer(modifier = Modifier.weight(1f))
         Button(
             onClick = { viewModel.saveMedicine() },
+            enabled = form.aisleId.isNotBlank(),
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(stringResource(R.string.save_button))
